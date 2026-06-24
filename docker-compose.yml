@@ -1,0 +1,23 @@
+# Levanta PostgreSQL para desarrollo local.
+#   docker compose up -d
+# La imagen oficial trae la extension btree_gist (la habilita la migracion 0002).
+services:
+  db:
+    image: postgres:16
+    container_name: canchaya-db
+    environment:
+      POSTGRES_USER: canchaya
+      POSTGRES_PASSWORD: canchaya
+      POSTGRES_DB: canchaya
+    ports:
+      - "5432:5432"
+    volumes:
+      - canchaya_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U canchaya"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  canchaya_pgdata:
