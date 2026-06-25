@@ -260,3 +260,4 @@ Cosas que este proyecto te entrena y que en una entrevista o en el trabajo se no
 - Rate limiting en `/auth/login`.
 - Rotación de refresh tokens (invalidar el viejo al emitir uno nuevo).
 - Dockerizar la propia API con un `Dockerfile` multi-stage.
+# test
