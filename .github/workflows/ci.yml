@@ -17,7 +17,8 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_USER: canchaya
-          POSTGRES_PASSWORD: canchaya
+          # Sin contrasena: este Postgres es efimero y solo vive dentro del runner del job.
+          POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: canchaya_test
         ports:
           - 5432:5432
@@ -28,15 +29,15 @@ jobs:
           --health-retries 10
 
     env:
-      TEST_DATABASE_URL: postgresql+psycopg://canchaya:canchaya@localhost:5432/canchaya_test
-      DATABASE_URL: postgresql+psycopg://canchaya:canchaya@localhost:5432/canchaya_test
+      TEST_DATABASE_URL: postgresql+psycopg://canchaya@localhost:5432/canchaya_test
+      DATABASE_URL: postgresql+psycopg://canchaya@localhost:5432/canchaya_test
       SECRET_KEY: ci-secret-not-for-production
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: "3.11"
           cache: pip
