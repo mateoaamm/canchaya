@@ -17,7 +17,8 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_USER: canchaya
-          POSTGRES_PASSWORD: canchaya
+          # Sin contrasena: este Postgres es efimero y solo vive dentro del runner del job.
+          POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: canchaya_test
         ports:
           - 5432:5432
@@ -28,8 +29,8 @@ jobs:
           --health-retries 10
 
     env:
-      TEST_DATABASE_URL: postgresql+psycopg://canchaya:canchaya@localhost:5432/canchaya_test
-      DATABASE_URL: postgresql+psycopg://canchaya:canchaya@localhost:5432/canchaya_test
+      TEST_DATABASE_URL: postgresql+psycopg://canchaya@localhost:5432/canchaya_test
+      DATABASE_URL: postgresql+psycopg://canchaya@localhost:5432/canchaya_test
       SECRET_KEY: ci-secret-not-for-production
 
     steps:
