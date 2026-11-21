@@ -33,3 +33,5 @@ services:
         value: "7"
       - key: DEBUG
         value: "false"
+      - key: APP_ENV
+        value: "production"            # bloquea scripts.seed en produccion (amenaza T1)
