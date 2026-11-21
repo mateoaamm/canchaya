@@ -1026,12 +1026,12 @@
               "reasonOutOfScope": "",
               "threats": [
                 {
-                  "status": "Open",
+                  "status": "Mitigated",
                   "severity": "High",
                   "title": "T1 · Cuentas del seed con contraseñas publicadas en el repositorio",
                   "type": "Spoofing",
                   "description": "scripts/seed.py (líneas 52-74) crea un admin, un staff y un cliente con contraseñas fijas, y el repositorio es público. El seed se corrió contra la base de producción en Render. Quien lea el repositorio puede entrar como administrador: crear sedes, canchas y horarios, y ver todas las reservas. Riesgo: I 3 × P 3 = 9.",
-                  "mitigation": "Requisito: en producción no existe ninguna cuenta con credenciales por defecto o publicadas. El seed se niega a correr con APP_ENV=production y las cuentas iniciales se crean con una contraseña aleatoria que se cambia en el primer ingreso. Acción inmediata: cambiar o desactivar esas tres cuentas en Render. ASVS 5.0: 6.3.2 y 15.2.3. Verificación: prueba de humo que intenta el login con las credenciales del seed contra el despliegue y espera 401, y test que confirma que seed.py aborta con APP_ENV=production.",
+                  "mitigation": "Requisito: el seed se niega a correr con APP_ENV=production o contra una base que no sea local, antes de abrir cualquier sesión (en julio se cargó en producción corriéndolo desde el portátil con la URL externa de Render). ASVS 5.0: 6.3.2 y 15.2.3. Verificación: tests/test_seed_guard.py (PR #5). Mitigada: además, la base de producción con esas cuentas expiró y fue eliminada, y la API quedó suspendida el 21/11/2026.",
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 1,
@@ -1039,12 +1039,12 @@
                   "id": "5ebf28ac-5f9b-5c90-9245-930e17b643cd"
                 },
                 {
-                  "status": "Open",
+                  "status": "Mitigated",
                   "severity": "High",
                   "title": "T2 · Cancelar después de jugar deja el pago como reembolsado (lógica de negocio)",
                   "type": "Tampering",
                   "description": "POST /bookings/{id}/cancel (bookings.py:114-134) permite cancelar una reserva confirmada en cualquier momento, incluso cuando el partido ya se jugó, y cambia el pago de paid a refunded sin regla de tiempo ni aprobación. Un cliente juega, cancela desde «Mis reservas» y queda registrado un reembolso que la sede no debía. Ninguna herramienta automática lo detecta: el código hace lo que dice, el problema es la regla de negocio. Riesgo: I 3 × P 3 = 9.",
-                  "mitigation": "Requisito: un cliente solo puede cancelar hasta 2 horas antes de start_time (el plazo exacto lo define la sede); después la API responde 409 y ni la reserva ni el pago cambian. El staff y el admin no tienen ese límite; su rastro lo cubre T7. ASVS 5.0: 2.3.1 y 2.3.2. Verificación: tests/test_bookings_cancel_deadline.py: un partido ya jugado y uno que empieza en 1 hora responden 409 con el pago en paid; cancelar con 3 días de anticipación sigue reembolsando.",
+                  "mitigation": "Requisito: un cliente solo puede cancelar hasta 2 horas antes de start_time (el plazo exacto lo define la sede); después la API responde 409 y ni la reserva ni el pago cambian. El staff y el admin no tienen ese límite; su rastro lo cubre T7. ASVS 5.0: 2.3.1 y 2.3.2. Verificación: tests/test_bookings_cancel_deadline.py: un partido ya jugado y uno que empieza en 1 hora responden 409 con el pago en paid; cancelar con 3 días de anticipación sigue reembolsando. Mitigada en el PR #3.",
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 2,

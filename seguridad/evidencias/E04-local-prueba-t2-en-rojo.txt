@@ -1,0 +1,11 @@
+Salida de pytest en el portátil de Mateo (Ubuntu, Python 3.14), 21/11/2026 09:50,
+rama fix/t2-cancelacion-tardia, ANTES del arreglo (solo la prueba nueva).
+
+>       assert r.status_code == 409
+E       assert 200 == 409
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_bookings_cancel_deadline.py:65: AssertionError
+FAILED tests/test_bookings_cancel_deadline.py::test_client_cannot_cancel_already_played_booking - assert 200 == 409
+FAILED tests/test_bookings_cancel_deadline.py::test_client_cannot_cancel_inside_deadline - assert 200 == 409
+2 failed, 2 passed, 3 warnings in 2.06s
