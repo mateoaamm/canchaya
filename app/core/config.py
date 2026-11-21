@@ -35,6 +35,8 @@ class Settings(BaseSettings):
     # App
     project_name: str = "CanchaYa"
     debug: bool = False
+    # development | production. Produccion lo declara en render.yaml (amenaza T1).
+    app_env: str = "development"
 
 
 @lru_cache
