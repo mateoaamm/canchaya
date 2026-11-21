@@ -1,6 +1,6 @@
 # Lab 1 · Modelo de amenazas de CanchaYa
 
-**Equipo:** Mateo Arroyave (mateoaamm), Nombre Apellido (usuario2)
+**Equipo:** Mateo Arroyave (mateoaamm)
 **Aplicación:** CanchaYa, API de reservas de canchas sintéticas (FastAPI + PostgreSQL en Render) con frontend Next.js.
 **Archivos:** `modelo.json` (Threat Dragon 2.6), `informe.pdf` (botón *Report*) y `dfd.png` (el diagrama).
 
