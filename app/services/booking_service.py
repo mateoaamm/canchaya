@@ -7,7 +7,7 @@ Defensa en profundidad:
      IntegrityError. La capa 1 mejora UX; la capa 2 garantiza correctitud.
 """
 
-from datetime import datetime
+from datetime import UTC, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from sqlalchemy import select
@@ -21,6 +21,11 @@ from app.models.court import Court
 
 class BookingError(Exception):
     """Error de negocio. La capa de API lo traduce a 409/422 segun el caso."""
+
+
+# Plazo minimo para que un CLIENTE cancele (amenaza T2 del Lab 1, ASVS 5.0 2.3.2).
+# El staff y el admin no tienen este limite.
+CLIENT_CANCEL_DEADLINE = timedelta(hours=2)
 
 
 def _to_utc(dt: datetime) -> datetime:
@@ -73,3 +78,15 @@ def overlaps_in_code(db: Session, court_id: int, start: datetime, end: datetime)
         start_u < Booking.end_time,
     )
     return db.scalar(stmt) is not None
+
+
+def validate_client_can_cancel(booking: Booking, now: datetime | None = None) -> None:
+    """Un cliente solo puede cancelar hasta CLIENT_CANCEL_DEADLINE antes del inicio.
+
+    Sin esta regla un cliente podia jugar, cancelar despues y dejar el pago como
+    REFUNDED (amenaza T2 del modelo de amenazas).
+    """
+    now = now or datetime.now(UTC)
+    if _to_utc(booking.start_time) - now < CLIENT_CANCEL_DEADLINE:
+        hours = int(CLIENT_CANCEL_DEADLINE.total_seconds() // 3600)
+        raise BookingError(f"Solo puedes cancelar hasta {hours} horas antes del inicio")
