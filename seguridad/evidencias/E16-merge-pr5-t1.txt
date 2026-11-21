@@ -1,0 +1,17 @@
+Salida en el portátil de Mateo, 21/11/2026 14:05, al fusionar el PR de T1.
+
+$ gh pr merge fix/t1-seed-produccion --merge
+✓ Merged pull request mateoaamm/canchaya#5 (fix(T1): el seed se niega a correr en produccion o contra una base remota)
+$ git pull
+   7ee42aa..8e1afcd  main       -> origin/main
+ .env.example             |  2 ++
+ app/core/config.py       |  2 ++
+ render.yaml              |  2 ++
+ scripts/seed.py          | 17 +++++++++++++++++
+ tests/test_seed_guard.py | 68 ++++++++++++++++++++++
+ 5 files changed, 91 insertions(+)
+$ git log --oneline -4
+8e1afcd (HEAD -> main, origin/main) Merge pull request #5 from mateoaamm/fix/t1-seed-produccion
+1b68554 fix: bloquea el seed en produccion y contra bases remotas (T1)
+0422ccb test: reproduce T1, el seed corre en produccion y contra una base remota
+7ee42aa Merge pull request #3 from mateoaamm/fix/t2-cancelacion-tardia
