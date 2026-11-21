@@ -22,7 +22,6 @@ from app.schemas.booking import BookingCreate, BookingOut
 from app.services.booking_service import (
     BookingError,
     overlaps_in_code,
-    validate_client_can_cancel,
     validate_within_hours,
 )
 
@@ -126,13 +125,6 @@ def cancel_booking(
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Reserva no encontrada")
     if booking.status == BookingStatus.CANCELLED:
         raise HTTPException(status.HTTP_409_CONFLICT, "La reserva ya estaba cancelada")
-
-    # T2 (Lab 1): un cliente no puede cancelar un partido ya jugado ni a ultima hora.
-    if current_user.role == UserRole.CLIENT:
-        try:
-            validate_client_can_cancel(booking)
-        except BookingError as exc:
-            raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
 
     booking.status = BookingStatus.CANCELLED
     if booking.payment and booking.payment.status == PaymentStatus.PAID:
